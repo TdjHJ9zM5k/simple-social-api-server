@@ -1,0 +1,5 @@
+/mydatabase.mv.db
+/mydatabase.trace.db
+target/
+.classpath
+/.classpath

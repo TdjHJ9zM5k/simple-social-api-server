@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import it.iakta.social.dto.UserDTO;
 import it.iakta.social.entity.User;
+import it.iakta.social.login.payload.LoginResponse;
 import it.iakta.social.repository.UserRepository;
 
 @Service
@@ -37,10 +38,10 @@ public class UserService {
         User user = new User(userDTO.getUsername(), encryptedPassword);
         return userRepository.save(user).getUsername();
     }
-    public List<UserDTO> getAllUsers() {
-        List<UserDTO> users = new ArrayList<>();
+    public List<LoginResponse> getAllUsers() {
+        List<LoginResponse> users = new ArrayList<>();
         userRepository.findAll().forEach(user -> 
-            users.add(new UserDTO(user.getUsername(), user.getPassword()))
+            users.add(new LoginResponse(user.getId(), user.getUsername()))
         );
         return users;
     }

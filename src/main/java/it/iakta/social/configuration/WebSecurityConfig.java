@@ -67,16 +67,14 @@ public class WebSecurityConfig {
         .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(auth -> 
-        	auth.requestMatchers("/api/auth/**").permitAll()
-              .requestMatchers("/api/test/**").permitAll()
-              .requestMatchers("/signup/**").permitAll()
+        	auth.requestMatchers("/signup/**").permitAll()
+              .requestMatchers("/signout/**").permitAll()
+              .requestMatchers("/login/**").permitAll()
               .requestMatchers(h2ConsolePath + "/**").permitAll()
+              .requestMatchers("/swagger-ui/**").permitAll()
+              .requestMatchers("/v3/api-docs/**").permitAll()
+              .requestMatchers("/context-path/**").permitAll()
               .anyRequest().authenticated()
-//          auth.requestMatchers("/api/auth/**").permitAll()
-////              .requestMatchers("/api/test/**").permitAll()
-//          		.requestMatchers("/signup").permitAll()
-//          		.requestMatchers("/h2-console").permitAll()
-////              .anyRequest().authenticated()
         );
     
  // fix H2 database console: Refused to display ' in a frame because it set 'X-Frame-Options' to 'deny'

@@ -12,11 +12,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.iakta.social.dto.UserDTO;
 import it.iakta.social.login.payload.LoginRequest;
+import it.iakta.social.login.payload.LoginResponse;
 import it.iakta.social.login.payload.MessageResponse;
 import it.iakta.social.security.jwt.JwtUtils;
 import it.iakta.social.security.service.UserDetailsImpl;
@@ -31,8 +31,6 @@ public class AuthController {
   @Autowired
   AuthenticationManager authenticationManager;
 
-//  @Autowired
-//  UserRepository userRepository;
   @Autowired
   UserService userService;
 
@@ -54,14 +52,10 @@ public class AuthController {
 
     ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
 
-//    List<String> roles = userDetails.getAuthorities().stream()
-//        .map(item -> item.getAuthority())
-//        .collect(Collectors.toList());
-
     return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-        .body(
-                                   userDetails.getUsername()
-                                   );
+        .body(new LoginResponse(userDetails.getId(),
+        						userDetails.getUsername()
+			        		));
   }
 
   @PostMapping("/signup")
