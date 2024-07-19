@@ -1,12 +1,5 @@
 package it.iakta.social.controller;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import jakarta.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -23,24 +16,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.iakta.social.dto.UserDTO;
-import it.iakta.social.entity.User;
 import it.iakta.social.login.payload.LoginRequest;
 import it.iakta.social.login.payload.MessageResponse;
-import it.iakta.social.login.payload.SignupRequest;
-import it.iakta.social.repository.UserRepository;
 import it.iakta.social.security.jwt.JwtUtils;
 import it.iakta.social.security.service.UserDetailsImpl;
+import it.iakta.social.service.UserService;
+import jakarta.validation.Valid;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/auth")
+//@RequestMapping("/user")
 public class AuthController {
 	
   @Autowired
   AuthenticationManager authenticationManager;
 
+//  @Autowired
+//  UserRepository userRepository;
   @Autowired
-  UserRepository userRepository;
+  UserService userService;
 
   @Autowired
   PasswordEncoder encoder;
@@ -60,9 +54,9 @@ public class AuthController {
 
     ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
 
-    List<String> roles = userDetails.getAuthorities().stream()
-        .map(item -> item.getAuthority())
-        .collect(Collectors.toList());
+//    List<String> roles = userDetails.getAuthorities().stream()
+//        .map(item -> item.getAuthority())
+//        .collect(Collectors.toList());
 
     return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
         .body(
@@ -71,18 +65,12 @@ public class AuthController {
   }
 
   @PostMapping("/signup")
-  public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-    if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+  public ResponseEntity<?> registerUser(@Valid @RequestBody UserDTO signUpRequest) {
+    if (userService.existsByUsername(signUpRequest.getUsername())) {
       return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
     }
-
-    // Create new user's account
-    User user = new User(signUpRequest.getUsername(),
-                         encoder.encode(signUpRequest.getPassword()));
-    
-    //save user to database
-
-    return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    String registeredUser = userService.addUser(signUpRequest);
+    return ResponseEntity.ok(new MessageResponse("User "+registeredUser+" registered successfully!"));
   }
 
   @PostMapping("/signout")

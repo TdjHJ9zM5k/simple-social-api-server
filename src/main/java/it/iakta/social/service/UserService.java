@@ -19,6 +19,10 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    
+	public boolean existsByUsername(String username) {
+		return userRepository.existsByUsername(username);
+	}
 
 //    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
