@@ -18,3 +18,5 @@ steps:
           - "asia-east1"
 images:
     - "gcr.io/$PROJECT_ID/myapi:$COMMIT_SHA"
+options:
+  logging: CLOUD_LOGGING_ONLY
