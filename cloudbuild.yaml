@@ -1,7 +1,7 @@
 steps:
     # Build the container image
     - name: "gcr.io/cloud-builders/docker"
-      args: ["build", "-t", "gcr.io/$PROJECT_ID/myapi:$COMMIT_SHA", "."]
+      args: ["build", "-t", "gcr.io/$PROJECT_ID/iakta-social:$COMMIT_SHA", "."]
     # Push the container image to Container Registry
     - name: "gcr.io/cloud-builders/docker"
       args: ["push", "gcr.io/$PROJECT_ID/myapi:$COMMIT_SHA"]
@@ -11,12 +11,12 @@ steps:
       args:
           - "run"
           - "deploy"
-          - "myapi"
+          - "iakta-social"
           - "--image"
           - "gcr.io/$PROJECT_ID/myapi:$COMMIT_SHA"
           - "--region"
-          - "asia-east1"
+          - "europe-west3"
 images:
-    - "gcr.io/$PROJECT_ID/myapi:$COMMIT_SHA"
+    - "gcr.io/$PROJECT_ID/iakta-social:$COMMIT_SHA"
 options:
   logging: CLOUD_LOGGING_ONLY
