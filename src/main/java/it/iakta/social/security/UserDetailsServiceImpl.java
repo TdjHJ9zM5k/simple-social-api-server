@@ -7,20 +7,20 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import it.iakta.social.entity.User;
-import it.iakta.social.repository.UserRepository;
+import it.iakta.social.entity.UserLogin;
+import it.iakta.social.repository.UserLoginRepository;
 import it.iakta.social.security.service.UserDetailsImpl;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 	
   @Autowired
-  UserRepository userRepository;
+  UserLoginRepository userRepository;
 
   @Override
   @Transactional
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    User user = userRepository.findByUsername(username)
+    UserLogin user = userRepository.findByUsername(username)
         .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
 
     return UserDetailsImpl.build(user);

@@ -1,12 +1,12 @@
-package it.iakta.social.login.payload;
+package it.iakta.social.dto;
 
-public class LoginResponse {
+public class UsernameDTO {
 
 	private Long id;
 
 	private String username;
 
-	public LoginResponse(Long id, String username) {
+	public UsernameDTO(Long id, String username) {
 		super();
 		this.id = id;
 		this.username = username;

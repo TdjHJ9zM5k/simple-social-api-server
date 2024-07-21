@@ -14,6 +14,15 @@ public class SocialApplication {
 		SpringApplication.run(SocialApplication.class, args);
 	}
 
+	/**
+	 * TODO:
+	 * 
+	 * 1. Create controller, service, entity, dto and repository packages for the following entities:
+	 * 	- List of users followed by a user
+	 *  - List of posts
+	 *  	. A post has a content, a creation date and a list of comments
+	 *  
+	 */
 	
 	
 }

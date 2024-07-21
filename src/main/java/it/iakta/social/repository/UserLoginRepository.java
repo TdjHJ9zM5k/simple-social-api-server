@@ -5,12 +5,12 @@ import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import it.iakta.social.entity.User;
+import it.iakta.social.entity.UserLogin;
 
 @Repository
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface UserLoginRepository extends CrudRepository<UserLogin, Long> {
 	
-	 Optional<User> findByUsername(String username);
+	 Optional<UserLogin> findByUsername(String username);
 
 	 Boolean existsByUsername(String username);
 }
