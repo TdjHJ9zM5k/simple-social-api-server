@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import it.iakta.social.entity.UserFollowing;
 import it.iakta.social.login.payload.MessageResponse;
 import it.iakta.social.security.service.UserDetailsImpl;
+import it.iakta.social.service.MessageService;
 import it.iakta.social.service.UserService;
 
 @RestController
@@ -21,6 +22,9 @@ public class UserController {
 
 	@Autowired
     private UserService userService;
+	
+	@Autowired
+	private MessageService messageService;
 	
 	@PostMapping("/follow/{username_id}")
 	public ResponseEntity<?> followUser(
@@ -44,7 +48,7 @@ public class UserController {
                     .body(new MessageResponse("Error: You already follow this user!"));
 	    }
 	    UserFollowing followed = userService.followUser(userDetails.getId(), followedUserId);
-	    return ResponseEntity.ok("You now follow user with id: " + followed.getUserFollowId());
+	    return ResponseEntity.ok(messageService.getUsersAndFollowingMessages(userDetails.getId(), followed.getUserFollowId()));
 	}
 
     @PostMapping("/unfollow/{username_id}")

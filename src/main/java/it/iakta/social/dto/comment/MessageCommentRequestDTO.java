@@ -1,4 +1,4 @@
-package it.iakta.social.dto;
+package it.iakta.social.dto.comment;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

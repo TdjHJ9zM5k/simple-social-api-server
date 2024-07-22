@@ -9,10 +9,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import it.iakta.social.dto.MessageCommentResponseDTO;
-import it.iakta.social.dto.MessageListResponseDTO;
-import it.iakta.social.dto.MessageResponseDTO;
-import it.iakta.social.dto.UsernameDTO;
+import it.iakta.social.dto.comment.MessageCommentResponseDTO;
+import it.iakta.social.dto.message.MessageDetailsCommentResponseDTO;
+import it.iakta.social.dto.message.MessageDetailsResponseDTO;
+import it.iakta.social.dto.message.MessageListResponseDTO;
+import it.iakta.social.dto.message.MessageResponseDTO;
+import it.iakta.social.dto.user.UsernameDTO;
 import it.iakta.social.entity.Message;
 import it.iakta.social.entity.MessageComment;
 import it.iakta.social.repository.MessageCommentRepository;
@@ -40,24 +42,42 @@ public class MessageService {
 	}
 	
 	public MessageCommentResponseDTO addComment(Long userId, Long messageId, String comment) {
-		MessageComment newComment = messageCommentRepository.save(new MessageComment(userId, messageId, comment));
+		MessageComment newComment = messageCommentRepository.save(new MessageComment(messageId, userId, comment));
 		return commentToDTO(newComment);
 	}
-	public List<MessageListResponseDTO> getUsersAndFollowingMessages(Long userId) {
+	
+	public List<MessageListResponseDTO> getUsersAndFollowingMessages(Long userId, Long followedUserId) {
 		List<MessageListResponseDTO> messages = new ArrayList<>();
-		List<UsernameDTO> followers = userService.getFollowedUsers(userId);
-		messages.addAll(followers.stream().map(follower -> getMessages(follower.getId())).flatMap(List::stream).toList());
-		messages.addAll(getMessages(userId));
+		if (followedUserId != null) {
+			messages.addAll(getMessages(followedUserId));
+		} else {
+			List<UsernameDTO> followers = userService.getFollowedUsers(userId);
+			messages.addAll(followers.stream().map(follower -> getMessages(follower.getId())).flatMap(List::stream).toList());
+			messages.addAll(getMessages(userId));
+		}
 		messages.sort((m1, m2) -> m2.getDate().compareTo(m1.getDate()));
 		return messages;
     }
+	
+	
+	//RETRRIEVE POST AND COMMENTS
+	public MessageDetailsResponseDTO getMessageDetails(Long messageId) {
+		Message message = messageRepository.findById(messageId).get();
+		List<MessageDetailsCommentResponseDTO> comments = messageCommentRepository.findAllByMessageId(messageId).stream()
+				.map(comment -> messageDetailscommentToDTO(comment)).toList();
+		ZoneId zoneId = ZoneId.systemDefault();
+		Instant instant = message.getCreatedAt().atZone(zoneId).toInstant();
+		String username = userRepository.findById(message.getUserId()).get().getUsername();
+		return new MessageDetailsResponseDTO(message.getId(), message.getMessage(), Date.from(instant), username,
+				comments);
+	}
+	
 	
 	//RETRIEVE ALL MESSAGES BY A USER
 	private List<MessageListResponseDTO> getMessages(Long userId) {
 		return messageRepository.findAllByUserId(userId).stream()
 				.map(message -> messageToDTO(message)).toList();
 	}
-	
 	
 	//CONVERTS MESSAGE TO DTO AND TRUNCATES THE MESSAGE TO 100 CHARACTERS
 	private MessageListResponseDTO messageToDTO(Message message) {
@@ -84,6 +104,18 @@ public class MessageService {
 				);
 	}
 	
+	private MessageDetailsCommentResponseDTO messageDetailscommentToDTO(MessageComment comment) {
+		ZoneId zoneId = ZoneId.systemDefault();
+		Instant instant = comment.getCreatedAt().atZone(zoneId).toInstant();
+		String username = userRepository.findById(comment.getUserId()).get().getUsername();
+		return new MessageDetailsCommentResponseDTO(
+				comment.getId(), 
+				comment.getComment(), 
+				Date.from(instant),
+				username
+				);
+	}
+	
 	public void deleteComment(Long commentId) {
         messageCommentRepository.deleteById(commentId);
     }
@@ -92,11 +124,11 @@ public class MessageService {
 		return messageRepository.existsById(messageId);
 	}
 	
-	public boolean doescommentExist(Long commentId) {
+	public boolean doesCommentExist(Long commentId) {
 		return messageCommentRepository.existsById(commentId);
 	}
 	
-	public boolean doescommentExistforMessage(Long messageId, Long commentId) {
+	public boolean doesCommentExistforMessage(Long messageId, Long commentId) {
 		return messageCommentRepository.findByMessageIdAndId(messageId,commentId).isPresent();
 	}
     

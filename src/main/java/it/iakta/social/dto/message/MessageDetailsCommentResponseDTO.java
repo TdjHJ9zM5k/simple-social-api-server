@@ -1,15 +1,12 @@
-package it.iakta.social.dto;
+package it.iakta.social.dto.message;
 
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class MessageCommentResponseDTO {
+public class MessageDetailsCommentResponseDTO {
 	
-    @JsonProperty("message_id")
-    private Long message_id;
-    
     @JsonProperty("comment_id")
     private Long comment_id;
 
@@ -23,19 +20,14 @@ public class MessageCommentResponseDTO {
     @JsonProperty("author")
     private String username;
 
-    public MessageCommentResponseDTO() {}
+    public MessageDetailsCommentResponseDTO() {}
 
-	public MessageCommentResponseDTO(Long message_id, Long comment_id, String comment, Date date, String username) {
+	public MessageDetailsCommentResponseDTO(Long comment_id, String comment, Date date, String username) {
 		super();
-		this.message_id = message_id;
 		this.comment_id = comment_id;
 		this.comment = comment;
 		this.date = date;
 		this.username = username;
-	}
-
-	public Long getMessage_id() {
-		return message_id;
 	}
 
 	public Long getComment_id() {

@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import it.iakta.social.dto.UserDTO;
-import it.iakta.social.dto.UsernameDTO;
+import it.iakta.social.dto.user.UserDTO;
+import it.iakta.social.dto.user.UsernameDTO;
 import it.iakta.social.entity.UserFollowing;
 import it.iakta.social.entity.UserLogin;
 import it.iakta.social.repository.UserFollowingRepository;

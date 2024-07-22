@@ -2,6 +2,7 @@ package it.iakta.social.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.iakta.social.dto.UserDTO;
+import it.iakta.social.dto.user.UserDTO;
 import it.iakta.social.login.payload.LoginRequest;
 import it.iakta.social.login.payload.LoginResponse;
 import it.iakta.social.login.payload.MessageResponse;
@@ -43,9 +44,18 @@ public class LoginController {
   @Autowired
   JwtUtils jwtUtils;
 
+  
+  
+  // check if user is already signed in
   @PostMapping("/signin")
-  public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+  public ResponseEntity<?> authenticateUser(
+		  @Valid @RequestBody LoginRequest loginRequest,
+		  @AuthenticationPrincipal UserDetailsImpl loginUserDetailsImpl) {
 
+	if (loginUserDetailsImpl != null) {
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new MessageResponse("Error: You are already signed in!"));
+	}
     Authentication authentication = authenticationManager
         .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
