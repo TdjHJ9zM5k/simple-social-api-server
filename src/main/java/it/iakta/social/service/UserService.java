@@ -55,8 +55,6 @@ public class UserService {
                 .toList();
 	}
 
-//    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
     public String addUser(UserDTO userDTO) {
     	String encryptedPassword = passwordEncoder.encode(userDTO.getPassword());
         UserLogin user = new UserLogin(userDTO.getUsername(), encryptedPassword);

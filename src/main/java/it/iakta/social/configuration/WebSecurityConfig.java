@@ -18,6 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import it.iakta.social.security.UserDetailsServiceImpl;
 import it.iakta.social.security.jwt.AuthEntryPointJwt;
 import it.iakta.social.security.jwt.AuthTokenFilter;
+import jakarta.servlet.http.HttpServletResponse;
 
 
 @Configuration
@@ -36,13 +37,13 @@ public class WebSecurityConfig {
   @Autowired
   private AuthEntryPointJwt unauthorizedHandler;
 
-  @Bean
-  public AuthTokenFilter authenticationJwtTokenFilter() {
+    @Bean
+    AuthTokenFilter authenticationJwtTokenFilter() {
     return new AuthTokenFilter();
   }
-  
-  @Bean
-  public DaoAuthenticationProvider authenticationProvider() {
+
+    @Bean
+    DaoAuthenticationProvider authenticationProvider() {
       DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
        
       authProvider.setUserDetailsService(userDetailsService);
@@ -50,19 +51,19 @@ public class WebSecurityConfig {
    
       return authProvider;
   }
- 
-  @Bean
-  public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+
+    @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
     return authConfig.getAuthenticationManager();
   }
 
-  @Bean
-  public PasswordEncoder passwordEncoder() {
+    @Bean
+    PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
-  
-  @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+    @Bean
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
         .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -75,7 +76,12 @@ public class WebSecurityConfig {
               .requestMatchers("/v3/api-docs/**").permitAll()
               .requestMatchers("/context-path/**").permitAll()
               .anyRequest().authenticated()
-        );
+        )
+        .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint((request, response, authException) -> {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"message\": \"Error: You need to be authenticated to access this resource	.\"}");
+            }));
     
  // fix H2 database console: Refused to display ' in a frame because it set 'X-Frame-Options' to 'deny'
     http.headers(headers -> headers.frameOptions(frameOption -> frameOption.sameOrigin()));

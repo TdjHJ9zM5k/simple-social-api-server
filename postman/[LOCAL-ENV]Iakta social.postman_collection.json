@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "2e8316fb-ff38-4aaf-b54a-84fae4ab3aff",
-		"name": "Iakta social",
+		"name": "[LOCAL-ENV] Iakta social",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "33401894"
 	},
@@ -294,7 +294,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\":\"davide4\",\r\n    \"password\":\"password\"\r\n}",
+					"raw": "{\r\n    \"username\":\"davide\",\r\n    \"password\":\"password\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -322,7 +322,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\":\"davide1\",\r\n    \"password\":\"password\"\r\n}",
+					"raw": "{\r\n    \"username\":\"davide\",\r\n    \"password\":\"password\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -381,7 +381,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\":\"davide3\",\r\n    \"password\":\"password3\"\r\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"

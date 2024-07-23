@@ -43,10 +43,7 @@ public class LoginController {
 
   @Autowired
   JwtUtils jwtUtils;
-
   
-  
-  // check if user is already signed in
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(
 		  @Valid @RequestBody LoginRequest loginRequest,
