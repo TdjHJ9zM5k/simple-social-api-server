@@ -7,7 +7,7 @@
 
 The solution consists of a Java Spring Boot app and an embedded H2 database that acts as a MySQL instance.<br>
 Authentication is handled via JWT.<br><br>The app is serverlessly deployed (with continuous deployment) on Google Cloud Run at:
- - https://iakta-social-cj5d2qfngq-ey.a.run.app
+ - https://iakta-social-cj5d2qfngq-ew.a.run.app
 <br><br>
 <img src="docs/screenshots/cloud_build.png" alt="Trigger" width="600"/>
 <img src="docs/screenshots/cloud_run.png" alt="Deployement" width="600"/>
@@ -16,7 +16,7 @@ Authentication is handled via JWT.<br><br>The app is serverlessly deployed (with
 You can access the H2 database console at the URL:
 <br>
 
- - <a href="https://iakta-social-cj5d2qfngq-ey.a.run.app/h2-console" target="_blank">https://iakta-social-cj5d2qfngq-ey.a.run.app/h2-console</a>
+ - <a href="https://iakta-social-cj5d2qfngq-ew.a.run.app/h2-console" target="_blank">https://iakta-social-cj5d2qfngq-ew.a.run.app/h2-console</a>
  - **JDBC URL**: *jdbc:h2:file:./mydatabase*
  - **User Name**: *davide*
  - **Password**: *T4ScE3L5Tf58srdRp*
@@ -26,4 +26,4 @@ You can access the H2 database console at the URL:
 Postman collections are present under the folder <a href="https://github.com/davideatzori294/iakta-social/tree/main/postman" target="_blank">/postman</a><br><br><br>
 You can also find a Swagger UI at the following url:<br>
 
-- <a href="https://iakta-social-cj5d2qfngq-ey.a.run.app/swagger-ui/index.html" target="_blank">https://iakta-social-cj5d2qfngq-ey.a.run.app/swagger-ui/index.html</a>
+- <a href="https://iakta-social-cj5d2qfngq-ew.a.run.app/swagger-ui/index.html" target="_blank">https://iakta-social-cj5d2qfngq-ew.a.run.app/swagger-ui/index.html</a>
