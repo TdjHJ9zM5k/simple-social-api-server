@@ -7,7 +7,7 @@ This is a Simple Social Network API Server! This project provides authentication
 - **Technology Stack**: Java Spring Boot
 - **Database**: Embedded H2 (acting as a MySQL instance)
 - **Authentication**: JWT
-- **Deployment**: Serverless, with continuous deployment on Google Cloud Run
+- **Deployment**: Serverless, with Continuous Deployment pipeline on Google Cloud Run
 
 You can access the live deployment at:
 [https://iakta-social-cj5d2qfngq-ew.a.run.app](https://iakta-social-cj5d2qfngq-ew.a.run.app)
