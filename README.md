@@ -2,7 +2,7 @@
 
 ## General Description
 
-This is a week-long Simple Social Network API Server. This project provides authentication, user following, posting, and commenting functionalities.
+This is a week-long project for a Simple Social Network API Server. The features are authentication, user following, posting, and commenting functionalities.
 
 - **Technology Stack**: Java Spring Boot
 - **Database**: Embedded H2 (acting as a MySQL instance)
