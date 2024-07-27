@@ -23,9 +23,10 @@ public class Message {
     @NotBlank
     private Long userId;
 	
-    @NotBlank
     @Size(max = 240)
     private String message;
+    
+    private String imageName;
     
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -33,9 +34,9 @@ public class Message {
     public Message() {}
     
 	public Message(Long userId, String message) {
-		this.userId = userId;
-		this.message = message;
-	}
+        this.userId = userId;
+        this.message = message;
+    }
 
 	public Long getId() {
 		return id;
@@ -51,6 +52,14 @@ public class Message {
 
 	public LocalDateTime getCreatedAt() {
 		return createdAt;
+	}
+
+	public String getImageName() {
+		return imageName;
+	}
+
+	public void setImageName(String imageName) {
+		this.imageName = imageName;
 	}
 	
 }
