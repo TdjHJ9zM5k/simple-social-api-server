@@ -32,6 +32,9 @@ public class WebSecurityConfig {
   @Value("${spring.h2.console.path}")
   private String h2ConsolePath;
   
+  @Value("${social.app.frontendUrl}")
+  private String frontendUrl;
+  
   @Autowired
   UserDetailsServiceImpl userDetailsService;
 
@@ -66,8 +69,7 @@ public class WebSecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors(cors -> cors.configurationSource(request -> {
             CorsConfiguration corsConfig = new CorsConfiguration();
-            corsConfig.addAllowedOrigin("http://localhost:3000");
-            corsConfig.addAllowedHeader("https://social-network-frontend-cpkhh4qfda-ew.a.run.app");
+            corsConfig.addAllowedOrigin(frontendUrl);
             corsConfig.addAllowedMethod("*");
             corsConfig.addAllowedHeader("*");
             corsConfig.setAllowCredentials(true);
