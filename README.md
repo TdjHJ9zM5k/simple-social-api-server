@@ -10,7 +10,7 @@ This is a week-long project for a Simple Social Network API Server. The features
 - **Deployment**: Serverless, with Continuous Deployment pipeline on Google Cloud Run
 
 The frontend repository can be found at:
-[https://github.com/TdjHJ9zM5k/simple-social-api-web](https://github.com/TdjHJ9zM5k/simple-social-api-web)
+[Simple Social Network Web App](https://github.com/TdjHJ9zM5k/simple-social-api-web)
 
 You can access the live deployment at:
 [https://social-network-backend-cpkhh4qfda-ew.a.run.app](https://social-network-backend-cpkhh4qfda-ew.a.run.app)
