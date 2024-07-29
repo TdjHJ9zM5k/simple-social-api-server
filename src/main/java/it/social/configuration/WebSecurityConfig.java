@@ -9,6 +9,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -73,7 +74,10 @@ public class WebSecurityConfig {
             corsConfig.setAllowCredentials(true);
             return corsConfig;
         }))
-        .csrf(csrf -> csrf.disable())
+        .csrf(csrf -> csrf
+                .ignoringRequestMatchers(h2ConsolePath + "/**")
+                .disable()
+            )
         .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(auth ->
@@ -91,7 +95,7 @@ public class WebSecurityConfig {
             response.setContentType("application/json");
             response.getWriter().write("{\"message\": \"Error: You need to be authenticated to access this resource.\"}");
         }))
-        .headers(headers -> headers.frameOptions(frameOption -> frameOption.sameOrigin()))
+        .headers(headers -> headers.frameOptions(FrameOptionsConfig::disable))
         .authenticationProvider(authenticationProvider())
         .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
