@@ -14,8 +14,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.session.web.http.CookieSerializer;
-import org.springframework.session.web.http.DefaultCookieSerializer;
 import org.springframework.web.cors.CorsConfiguration;
 
 import it.social.security.UserDetailsServiceImpl;
@@ -68,15 +66,6 @@ public class WebSecurityConfig {
     return new BCryptPasswordEncoder();
   }
     
-  
-  @Bean
-  public CookieSerializer cookieSerializer() {
-      DefaultCookieSerializer serializer = new DefaultCookieSerializer();
-      serializer.setSameSite("None");
-      serializer.setUseSecureCookie(true);
-      return serializer;
-  }
-
   @Bean
   SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
       http.cors(cors -> cors.configurationSource(request -> {
@@ -112,6 +101,7 @@ public class WebSecurityConfig {
 
       return http.build();
   }
+
 //    @Bean
 //    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 //    http.cors(cors -> cors.disable())
