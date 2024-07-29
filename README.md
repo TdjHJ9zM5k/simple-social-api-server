@@ -9,8 +9,13 @@ This is a week-long project for a Simple Social Network API Server. The features
 - **Authentication**: JWT
 - **Deployment**: Serverless, with Continuous Deployment pipeline on Google Cloud Run
 
+The frontend repository can be found at:
+[https://github.com/TdjHJ9zM5k/simple-social-api-web](https://github.com/TdjHJ9zM5k/simple-social-api-web)
+
 You can access the live deployment at:
 [https://social-cpkhh4qfda-ey.a.run.app](https://social-cpkhh4qfda-ey.a.run.app)
+
+
 
 ## Screenshots
 
