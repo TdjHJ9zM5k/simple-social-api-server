@@ -67,6 +67,7 @@ public class WebSecurityConfig {
         http.cors(cors -> cors.configurationSource(request -> {
             CorsConfiguration corsConfig = new CorsConfiguration();
             corsConfig.addAllowedOrigin("http://localhost:3000");
+            corsConfig.addAllowedHeader("https://social-network-frontend-cpkhh4qfda-ew.a.run.app");
             corsConfig.addAllowedMethod("*");
             corsConfig.addAllowedHeader("*");
             corsConfig.setAllowCredentials(true);
