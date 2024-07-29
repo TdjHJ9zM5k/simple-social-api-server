@@ -97,7 +97,14 @@
 		    <artifactId>imgscalr-lib</artifactId>
 		    <version>4.2</version>
 		</dependency>
-
+		<dependency>
+		    <groupId>org.springframework.session</groupId>
+		    <artifactId>spring-session-core</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework.session</groupId>
+		    <artifactId>spring-session-data-redis</artifactId>
+		</dependency>
 
 	</dependencies>
 	<build>
