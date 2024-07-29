@@ -103,6 +103,7 @@ public class WebSecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("https://social-network-frontend-cpkhh4qfda-ew.a.run.app");
         configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedOrigin("https://social-network-backend-cpkhh4qfda-ew.a.run.app/h2-console");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);
