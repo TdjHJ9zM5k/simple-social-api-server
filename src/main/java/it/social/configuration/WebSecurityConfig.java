@@ -65,7 +65,7 @@ public class WebSecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin(frontendUrl); // Set to "*" if you want to allow any origin
+        configuration.addAllowedOrigin("*"); // Set to "*" if you want to allow any origin
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);
