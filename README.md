@@ -13,7 +13,7 @@ The frontend repository can be found at:
 [https://github.com/TdjHJ9zM5k/simple-social-api-web](https://github.com/TdjHJ9zM5k/simple-social-api-web)
 
 You can access the live deployment at:
-[https://social-cpkhh4qfda-ey.a.run.app](https://social-cpkhh4qfda-ey.a.run.app)
+[https://social-network-backend-cpkhh4qfda-ew.a.run.app](https://social-network-backend-cpkhh4qfda-ew.a.run.app)
 
 
 
@@ -28,7 +28,7 @@ You can access the live deployment at:
 ## H2 Database Console
 
 You can access the H2 database console at:
-[https://social-cpkhh4qfda-ey.a.run.app/h2-console](https://social-cpkhh4qfda-ey.a.run.app/h2-console)
+[https://social-network-backend-cpkhh4qfda-ew.a.run.app/h2-console](https://social-network-backend-cpkhh4qfda-ew.a.run.app/h2-console)
 
 - **JDBC URL**: `jdbc:h2:file:./mydatabase`
 - **User Name**: `davide`
@@ -43,4 +43,4 @@ A [`.jar file`](https://github.com/TdjHJ9zM5k/simple-social-api-server/releases/
 ## Swagger UI
 
 Explore the API with Swagger UI at:
-[https://social-cpkhh4qfda-ey.a.run.app/swagger-ui/index.html](https://social-cpkhh4qfda-ey.a.run.app/swagger-ui/index.html)
+[https://social-network-backend-cpkhh4qfda-ew.a.run.app/swagger-ui/index.html](https://social-network-backend-cpkhh4qfda-ew.a.run.app/swagger-ui/index.html)
