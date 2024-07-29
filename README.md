@@ -40,10 +40,6 @@ You can access the H2 database console at:
 
 A [`.jar file`](https://github.com/TdjHJ9zM5k/simple-social-api-server/releases/latest) containing the application is available under the Releases tab of this repository for local testing.
 
-## Postman Collections
-
-You can find the Postman collections in the [postman](https://github.com/TdjHJ9zM5k/simple-social-api-server/tree/main/postman) folder.
-
 ## Swagger UI
 
 Explore the API with Swagger UI at:
