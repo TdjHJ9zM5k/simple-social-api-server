@@ -44,3 +44,7 @@ A [`.jar file`](https://github.com/TdjHJ9zM5k/simple-social-api-server/releases/
 
 Explore the API with Swagger UI at:
 [https://social-network-backend-cpkhh4qfda-ew.a.run.app/swagger-ui/index.html](https://social-network-backend-cpkhh4qfda-ew.a.run.app/swagger-ui/index.html)
+
+
+
+<img src="docs/screenshots/swagger.png" alt="Trigger" width="600"/>
