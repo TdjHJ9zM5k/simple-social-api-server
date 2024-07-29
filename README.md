@@ -9,8 +9,13 @@ This is a week-long project for a Simple Social Network API Server. The features
 - **Authentication**: JWT
 - **Deployment**: Serverless, with Continuous Deployment pipeline on Google Cloud Run
 
+The frontend repository can be found at:
+[https://github.com/TdjHJ9zM5k/simple-social-api-web](https://github.com/TdjHJ9zM5k/simple-social-api-web)
+
 You can access the live deployment at:
-[https://iakta-social-cj5d2qfngq-ew.a.run.app](https://iakta-social-cj5d2qfngq-ew.a.run.app)
+[https://social-cpkhh4qfda-ey.a.run.app](https://social-cpkhh4qfda-ey.a.run.app)
+
+
 
 ## Screenshots
 
@@ -23,7 +28,7 @@ You can access the live deployment at:
 ## H2 Database Console
 
 You can access the H2 database console at:
-[https://iakta-social-cj5d2qfngq-ew.a.run.app/h2-console](https://iakta-social-cj5d2qfngq-ew.a.run.app/h2-console)
+[https://social-cpkhh4qfda-ey.a.run.app/h2-console](https://social-cpkhh4qfda-ey.a.run.app/h2-console)
 
 - **JDBC URL**: `jdbc:h2:file:./mydatabase`
 - **User Name**: `davide`
@@ -33,13 +38,13 @@ You can access the H2 database console at:
 
 ## Local Testing
 
-A [`.jar file`](https://github.com/davideatzori294/iakta-social/releases/tag/v0.0.2) containing the application is available under the Releases tab of this repository for local testing.
+A [`.jar file`](https://github.com/TdjHJ9zM5k/simple-social-api-server/releases/latest) containing the application is available under the Releases tab of this repository for local testing.
 
 ## Postman Collections
 
-You can find the Postman collections in the [postman](https://github.com/davideatzori294/iakta-social/tree/main/postman) folder.
+You can find the Postman collections in the [postman](https://github.com/TdjHJ9zM5k/simple-social-api-server/tree/main/postman) folder.
 
 ## Swagger UI
 
 Explore the API with Swagger UI at:
-[https://iakta-social-cj5d2qfngq-ew.a.run.app/swagger-ui/index.html](https://iakta-social-cj5d2qfngq-ew.a.run.app/swagger-ui/index.html)
+[https://social-cpkhh4qfda-ey.a.run.app/swagger-ui/index.html](https://social-cpkhh4qfda-ey.a.run.app/swagger-ui/index.html)
