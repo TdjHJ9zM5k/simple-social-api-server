@@ -1,5 +1,7 @@
 package it.social.configuration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -67,23 +69,27 @@ public class WebSecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors().configurationSource(corsConfigurationSource())
             .and()
-            .csrf().disable()  // Disable CSRF for stateless APIs
-            .exceptionHandling()
-            .authenticationEntryPoint(unauthorizedHandler)
+            .csrf().disable()
+            .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
             .and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeHttpRequests(auth ->
                 auth.requestMatchers("/").permitAll()
-                .requestMatchers("/api/signup/**").permitAll()
-                .requestMatchers("/api/signin/**").permitAll()
-                .requestMatchers(h2ConsolePath + "/**").permitAll()
-                .requestMatchers("/swagger-ui/**").permitAll()
-                .requestMatchers("/v3/api-docs/**").permitAll()
-                .requestMatchers("/context-path/**").permitAll()
-                .anyRequest().authenticated()
+                    .requestMatchers("/api/signup/**").permitAll()
+                    .requestMatchers("/api/signin/**").permitAll()
+                    .requestMatchers(h2ConsolePath + "/**").permitAll()
+                    .requestMatchers("/swagger-ui/**").permitAll()
+                    .requestMatchers("/v3/api-docs/**").permitAll()
+                    .requestMatchers("/context-path/**").permitAll()
+                    .anyRequest().authenticated()
             )
-            .headers(headers -> headers.frameOptions().disable())
+            .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint((request, response, authException) -> {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"message\": \"Error: You need to be authenticated to access this resource.\"}");
+            }))
+            .headers(headers -> headers.frameOptions(FrameOptionsConfig::disable))
             .authenticationProvider(authenticationProvider())
             .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
@@ -95,12 +101,21 @@ public class WebSecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedOrigin("https://social-network-frontend-cpkhh4qfda-ew.a.run.app");
+        configuration.addAllowedOrigin("https://social-network-backend-cpkhh4qfda-ew.a.run.app/h2-console");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
+
+        // Log CORS configuration
+        Logger logger = LoggerFactory.getLogger(WebSecurityConfig.class);
+        logger.info("CORS Configuration: Allowed Origins: {}, Allowed Methods: {}, Allowed Headers: {}",
+                configuration.getAllowedOrigins(),
+                configuration.getAllowedMethods(),
+                configuration.getAllowedHeaders());
+
         return source;
     }
 
