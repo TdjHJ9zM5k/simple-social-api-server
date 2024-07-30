@@ -135,7 +135,7 @@ public class MessageService {
 
             BufferedImage resizedImage = resizeImage(bufferedImage, 400, 400);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(resizedImage, "jpg", baos);
+            ImageIO.write(resizedImage, imageFile.getContentType().equals("image/png") ? "png" : "jpg", baos);
             imageBytes = baos.toByteArray();
 
             logger.info("Trying to save image: {}", imageFile.getContentType());

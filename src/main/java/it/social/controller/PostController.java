@@ -65,6 +65,10 @@ public class PostController {
         }
         
         if (image != null && !image.isEmpty()) {
+        	String contentType = image.getContentType();
+            if (!"image/png".equals(contentType) && !"image/jpeg".equals(contentType)) {
+                return ResponseEntity.badRequest().body("Error: Only PNG or JPEG files are allowed.");
+            }
             try {
                 BufferedImage bufferedImage = ImageIO.read(image.getInputStream());
                 if (bufferedImage == null) {
