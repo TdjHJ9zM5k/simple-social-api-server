@@ -65,40 +65,27 @@ public class WebSecurityConfig {
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors(cors -> cors.configurationSource(request -> {
-            CorsConfiguration corsConfig = new CorsConfiguration();
-            corsConfig.addAllowedOrigin("http://localhost:3000");
-            corsConfig.addAllowedOrigin("https://social-network-frontend-cpkhh4qfda-ew.a.run.app");
-            corsConfig.addAllowedOrigin("https://social-network-backend-cpkhh4qfda-ew.a.run.app/h2-console");
-            corsConfig.addAllowedMethod("*");
-            corsConfig.addAllowedHeader("*");
-            corsConfig.setAllowCredentials(true);
-            return corsConfig;
-        }))
-        .csrf(csrf -> csrf
-                .ignoringRequestMatchers(h2ConsolePath + "/**")
-                .disable()
+        http.cors().configurationSource(corsConfigurationSource())
+            .and()
+            .csrf().disable()  // Disable CSRF for stateless APIs
+            .exceptionHandling()
+            .authenticationEntryPoint(unauthorizedHandler)
+            .and()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+            .authorizeHttpRequests(auth ->
+                auth.requestMatchers("/").permitAll()
+                .requestMatchers("/api/signup/**").permitAll()
+                .requestMatchers("/api/signin/**").permitAll()
+                .requestMatchers(h2ConsolePath + "/**").permitAll()
+                .requestMatchers("/swagger-ui/**").permitAll()
+                .requestMatchers("/v3/api-docs/**").permitAll()
+                .requestMatchers("/context-path/**").permitAll()
+                .anyRequest().authenticated()
             )
-        .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authorizeHttpRequests(auth ->
-            auth.requestMatchers("/").permitAll()
-            .requestMatchers("/api/signup/**").permitAll()
-            .requestMatchers("/api/signin/**").permitAll()
-            .requestMatchers(h2ConsolePath + "/**").permitAll()
-            .requestMatchers("/swagger-ui/**").permitAll()
-            .requestMatchers("/v3/api-docs/**").permitAll()
-            .requestMatchers("/context-path/**").permitAll()
-            .anyRequest().authenticated()
-        )
-        .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint((request, response, authException) -> {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
-            response.getWriter().write("{\"message\": \"Error: You need to be authenticated to access this resource.\"}");
-        }))
-        .headers(headers -> headers.frameOptions(FrameOptionsConfig::disable))
-        .authenticationProvider(authenticationProvider())
-        .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+            .headers(headers -> headers.frameOptions().disable())
+            .authenticationProvider(authenticationProvider())
+            .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -106,9 +93,8 @@ public class WebSecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("https://social-network-frontend-cpkhh4qfda-ew.a.run.app");
         configuration.addAllowedOrigin("http://localhost:3000");
-        configuration.addAllowedOrigin("https://social-network-backend-cpkhh4qfda-ew.a.run.app/h2-console");
+        configuration.addAllowedOrigin("https://social-network-frontend-cpkhh4qfda-ew.a.run.app");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);
@@ -117,4 +103,5 @@ public class WebSecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
 }
