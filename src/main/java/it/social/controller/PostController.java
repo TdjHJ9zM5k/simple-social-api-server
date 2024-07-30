@@ -78,14 +78,14 @@ public class PostController {
         return ResponseEntity.ok(messageService.addMessage(userDetails.getId(), message.orElse(""), image));
     }
 
-    @GetMapping("/image/{imageName}")
-    public ResponseEntity<?> downloadImage(@PathVariable String imageName) {
+    @GetMapping("/image/{messageId}/{imageName}")
+    public ResponseEntity<?> downloadImage(@PathVariable Long messageId, @PathVariable String imageName) {
         byte[] imageData;
 		if (!messageService.doesImageExist(imageName)) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: Image does not exist.");
 		}
 		try {
-			imageData = messageService.downloadImage(imageName);
+			imageData = messageService.downloadImage(messageId, imageName);
 			return ResponseEntity.status(HttpStatus.OK)
 	                .contentType(MediaType.valueOf(IMAGE_PNG_VALUE))
 	                .body(imageData);

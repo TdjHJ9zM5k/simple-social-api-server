@@ -3,6 +3,9 @@ package it.social.service;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -15,6 +18,8 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.lang3.exception.ContextedRuntimeException;
 import org.imgscalr.Scalr;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,20 +56,23 @@ public class MessageService {
 	@Autowired
 	private UserService userService;
 	
+    private static final Logger logger = LoggerFactory.getLogger(MessageService.class);
+
+	
 	
 	//ADD POST AND IMAGE
 	public MessageResponseDTO addMessage(Long userId, String message, MultipartFile image) {
 	    Message newMessage = new Message(userId, message);
 	    newMessage = messageRepository.save(newMessage);
-	    try {
-	    	if (image != null && !image.isEmpty()) {
-	    		uploadImage(newMessage.getId(), image);
-	    		newMessage.setImageName(image.getOriginalFilename());
-	    		messageRepository.save(newMessage);
-	    	}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	    if (image != null && !image.isEmpty()) {
+			uploadImage(newMessage.getId(), image);
+			try {
+				newMessage.setImageName(URLEncoder.encode(image.getOriginalFilename(), StandardCharsets.UTF_8.toString()));
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			messageRepository.save(newMessage);
 		}
 	    return new MessageResponseDTO(newMessage.getId(), newMessage.getMessage());
 	}
@@ -101,8 +109,8 @@ public class MessageService {
 	}
 	
 	//RETRIEVE POST IMAGE
-	public byte[] downloadImage(String fileName) throws IOException, DataFormatException {
-		Optional<Image> image = imageRepository.findByName(fileName);
+	public byte[] downloadImage(Long messageId, String fileName) throws IOException, DataFormatException {
+		Optional<Image> image = imageRepository.findByMessageIdAndName(messageId, fileName);
 		if (image.isPresent()) {
 			return image.get().getImage();
 		} else {
@@ -110,25 +118,63 @@ public class MessageService {
 		}
 	}
 	
-	//SAVE IMAGE TO DATABASE
-	private String uploadImage(Long messageId, MultipartFile imageFile) throws IOException {
-		
-		byte[] imageBytes = null;
+	
+	 //SAVE IMAGE TO DATABASE
+    private String uploadImage(Long messageId, MultipartFile imageFile) {
+        byte[] imageBytes = null;
+        String encodedFileName = null;
         try {
+            // URL Encoding del nome del file
+            encodedFileName = URLEncoder.encode(imageFile.getOriginalFilename(), StandardCharsets.UTF_8.toString());
+
             BufferedImage bufferedImage = ImageIO.read(imageFile.getInputStream());
+            if (bufferedImage == null) {
+                logger.error("Error reading image: The image may be empty or invalid.");
+                return "Error: Could not read the image.";
+            }
 
             BufferedImage resizedImage = resizeImage(bufferedImage, 400, 400);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(resizedImage, "jpg", baos);
             imageBytes = baos.toByteArray();
-            Image imageToSave = new Image(messageId, imageFile.getOriginalFilename(), imageFile.getContentType(), imageBytes);
+
+            logger.info("Trying to save image: {}", imageFile.getContentType());
+            Image imageToSave = new Image(messageId, encodedFileName, imageFile.getContentType(), imageBytes);
             imageRepository.save(imageToSave);
+
+            logger.info("Image correctly saved: {}", encodedFileName);
+            return "File uploaded successfully: " + encodedFileName;
+
         } catch (IOException e) {
-        	return null;
-//                return ResponseEntity.badRequest().body("Error: Could not process the image.");
+            logger.error("Error: Could not process the image: ", e);
+            return "Error: Could not process the image.";
+        } catch (Exception e) {
+            logger.error("Error: Unexpected error occurred: ", e);
+            return "Error: Unexpected error occurred.";
         }
-        return "file uploaded successfully : " + imageFile.getOriginalFilename();
     }
+	
+	
+	
+	//SAVE IMAGE TO DATABASE
+//	private String uploadImage(Long messageId, MultipartFile imageFile) throws IOException {
+//		
+//		byte[] imageBytes = null;
+//        try {
+//            BufferedImage bufferedImage = ImageIO.read(imageFile.getInputStream());
+//
+//            BufferedImage resizedImage = resizeImage(bufferedImage, 400, 400);
+//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//            ImageIO.write(resizedImage, "jpg", baos);
+//            imageBytes = baos.toByteArray();
+//            Image imageToSave = new Image(messageId, imageFile.getOriginalFilename(), imageFile.getContentType(), imageBytes);
+//            imageRepository.save(imageToSave);
+//        } catch (IOException e) {
+//        	return null;
+////                return ResponseEntity.badRequest().body("Error: Could not process the image.");
+//        }
+//        return "file uploaded successfully : " + imageFile.getOriginalFilename();
+//    }
 	private BufferedImage resizeImage(BufferedImage originalImage, int targetWidth, int targetHeight) {
         return Scalr.resize(originalImage, Scalr.Method.QUALITY, Scalr.Mode.AUTOMATIC, targetWidth, targetHeight);
     }

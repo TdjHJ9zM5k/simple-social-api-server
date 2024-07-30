@@ -12,6 +12,8 @@ public interface ImageRepository extends CrudRepository<Image, Long> {
 	
 	Optional<Image> findByName(String name);
 	
+	Optional<Image> findByMessageIdAndName(Long messageId, String name);
+	
 	Optional<Image> findByMessageId(Long messageId);
 	
 	boolean existsByName(String name);
