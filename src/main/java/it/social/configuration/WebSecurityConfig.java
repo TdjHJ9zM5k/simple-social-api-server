@@ -9,7 +9,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,8 +22,6 @@ import it.social.security.UserDetailsServiceImpl;
 import it.social.security.jwt.AuthEntryPointJwt;
 import it.social.security.jwt.AuthTokenFilter;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Configuration
 @EnableMethodSecurity
@@ -33,16 +30,11 @@ public class WebSecurityConfig {
     @Value("${spring.h2.console.path}")
     private String h2ConsolePath;
 
-    @Value("${social.app.frontendUrl}")
-    private String frontendUrl;
-
     @Autowired
     UserDetailsServiceImpl userDetailsService;
 
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
-
-    private static final Logger logger = LoggerFactory.getLogger(WebSecurityConfig.class);
 
     @Bean
     AuthTokenFilter authenticationJwtTokenFilter() {
@@ -82,10 +74,10 @@ public class WebSecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .authorizeHttpRequests(auth -> auth
+                .requestMatchers(h2ConsolePath + "/**").permitAll()
                 .requestMatchers("/").permitAll()
                 .requestMatchers("/api/signup/**").permitAll()
                 .requestMatchers("/api/signin/**").permitAll()
-                .requestMatchers(h2ConsolePath + "/**").permitAll()
                 .requestMatchers("/swagger-ui/**").permitAll()
                 .requestMatchers("/v3/api-docs/**").permitAll()
                 .requestMatchers("/context-path/**").permitAll()
@@ -99,7 +91,7 @@ public class WebSecurityConfig {
                 })
             )
             .headers(headers -> headers
-                .frameOptions(FrameOptionsConfig::disable)
+                .frameOptions(frameOptions -> frameOptions.disable())
             )
             .authenticationProvider(authenticationProvider())
             .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -110,23 +102,13 @@ public class WebSecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("*");
-//        configuration.addAllowedOrigin("http://localhost:3000");
-//        configuration.addAllowedOrigin("https://social-network-frontend-cpkhh4qfda-ew.a.run.app");
+        configuration.addAllowedOriginPattern("*");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
-
-        // Log CORS configuration
-        logger.info("CORS Configuration: Allowed Origins: {}, Allowed Methods: {}, Allowed Headers: {}",
-                configuration.getAllowedOrigins(),
-                configuration.getAllowedMethods(),
-                configuration.getAllowedHeaders());
-
         return source;
     }
 }
-
