@@ -9,7 +9,7 @@ The features are authentication, user following, posting, and commenting functio
 - **Technology Stack**: Java Spring Boot
 - **Database**: Embedded H2 (acting as a MySQL instance)
 - **Authentication**: JWT
-- **Deployment**: Serverless, with Continuous Deployment pipeline on Google Cloud Run
+- **Deployment**: Serverless, with Continuous Deployment pipeline on **Google Cloud Run**
 
 The frontend repository can be found at:
 [Simple Social Network Web App](https://github.com/TdjHJ9zM5k/simple-social-api-web)
